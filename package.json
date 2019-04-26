@@ -2,7 +2,7 @@
   "name": "name-game-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://jasonsimms.github.io/name-game-react",
+  "homepage": "http://jasonsimms.github.io/name-game-react/",
   "dependencies": {
     "gh-pages": "^2.0.1",
     "react": "^16.8.6",
