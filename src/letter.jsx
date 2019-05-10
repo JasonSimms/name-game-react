@@ -13,7 +13,7 @@ background: blue;
 
 export default class task extends Component {
   render() {
-    console.log(this.props)
+    // console.log(this.props)
     return (
       <Draggable draggableId={this.props.letter.id} index={this.props.index}>
       {(provided) => (

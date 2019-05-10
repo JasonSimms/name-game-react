@@ -31,7 +31,37 @@ export default class gameField extends Component {
   state = initialData;
 
   onDragEnd = result => {
-    console.log(result)
+    // console.log( result)
+    // console.error(this.state)
+    const { destination , source, draggableId } = result;
+
+    if (!destination){ return ;}
+
+    if(
+      destination.droppableId === source.droppableId && destination.index === source.index
+    ) { return; }
+
+    const column = this.state.columns[source.droppableId];
+
+    const newLetterIds = Array.from(column.contentIds);
+    newLetterIds.splice(source.index, 1);
+    
+    newLetterIds.splice(destination.index, 0, draggableId);
+
+    const newColumn = {
+      ...column,
+      contentIds: newLetterIds
+    }
+
+    const newState = {
+      ...this.state,
+      columns: {
+        ...this.state.columns,
+        [newColumn.id] : newColumn,
+      }
+    }
+
+    this.setState(newState);
   }
 
   render() {
