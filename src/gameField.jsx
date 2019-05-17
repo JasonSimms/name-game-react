@@ -8,12 +8,13 @@ const Container = styled.div`
   display: flex;
 `;
 
-const shuffle = (array) => {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+const shuffle = array => {
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
-
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -25,20 +26,20 @@ const shuffle = (array) => {
   }
 
   return array;
-}
-let name = "BENNETNICHOLASSIMMS"
-name = name.split('');
-let letters = {}
-let bank = []
-name.forEach( (el, index) => {
+};
+
+// BUILD LETTERS FOR LETTER BANK FROM A NAME
+let name = "BENNETTNICHOLASSIMMS";
+name = name.split("");
+let letters = {};
+let bank = [];
+name.forEach((el, index) => {
   let id = el.concat(index);
-  bank.push(id)
-  letters[id] = { id , content : el }
-})
-// console.log(letters);
+  bank.push(id);
+  letters[id] = { id, content: el };
+});
 
 let initialData = {
-  // letters : [ 'J' , 'O', "H", 'N' , 'D', 'O', 'E'],
   // letters: {
   //   J: { id: "J", content: "J" },
   //   O: { id: "O", content: "O" },
@@ -48,8 +49,6 @@ let initialData = {
   //   O2: { id: "O2", content: "O" },
   //   E: { id: "E", content: "E" }
   // },
-  
-  
 
   columns: {
     "column-1": {
@@ -57,6 +56,13 @@ let initialData = {
       title: "Letter Bank",
       contentIds: shuffle(bank)
     },
+
+  solved: {
+    first: false,
+    second : false,
+    third: false,
+
+  }
     // "column-2": {
     //   id: "column-2",
     //   title: "First",
@@ -74,14 +80,15 @@ let initialData = {
     // },
   },
 
-  columnOrder: ["column-1"
-  // , 
-  // "column-2", "column-3", "column-4" 
-]
+  columnOrder: [
+    "column-1"
+    // ,
+    // "column-2", "column-3", "column-4"
+  ]
 };
 
 initialData.letters = letters;
-console.log(initialData.letters)
+console.log(initialData.letters);
 
 export default class gameField extends Component {
   state = initialData;
@@ -112,30 +119,69 @@ export default class gameField extends Component {
       newLetterIds.splice(destination.index, 0, draggableId);
 
       let guess = newLetterIds.map(el => {
-        return el.content
-      })
+        return el.content;
+      });
 
       const newColumn = {
         ...start,
         contentIds: newLetterIds,
-        guess,
+        guess
       };
-      
+
       //CHECK COLUMN FOR GUESSES
-      let guessName = newColumn.contentIds.join('').replace(/[0-9]/g, '');
-     
-      if(guessName.includes('BENNETT') || guessName.includes('NICHOLAS') || guessName.includes('SIMMS')){
-      console.log('bingo') 
-      console.log(guessName.indexOf('J'))  
-      newColumn.contentIds.splice(newColumn.contentIds.indexOf('J'), 4)
+      var guessName = newColumn.contentIds.join("").replace(/[0-9]/g, "");
+      console.log(guessName, guessName.includes("BENNETT"),guessName.includes("NICHOLAS"),guessName.includes("SIMMS") );
+      
+      let solved = this.state.solved
+
+      if (
+        guessName.includes("BENNETT") ||
+        guessName.includes("NICHOLAS") ||
+        guessName.includes("SIMMS")
+      ) {
+        console.log("bingo");
+        let pos = 0;
+        let length = 0;
+        
+
+        const removeName = () => {
+          newColumn.contentIds.splice(pos, length);
+        };
+
+        if (guessName.includes("BENNETT")) {
+        console.log("BENNETT");
+
+          length = 7;
+          pos = guessName.indexOf("BENNETT");
+          removeName();
+          solved.first = true;
+        }
+
+        if (guessName.includes("NICHOLAS")) {
+          length = 8;
+          pos = guessName.indexOf("NICHOLAS");
+          removeName();
+          solved.second = true;
+        }
+
+        if (guessName.includes("SIMMS")) {
+          length = 5;
+          pos = guessName.indexOf("SIMMS");
+          removeName();
+          solved.third = true;
+        }
+
+        // newColumn.contentIds.splice(newColumn.contentIds.indexOf("J"), 4);
       }
-      console.log(this.state)
+
       const newState = {
         ...this.state,
         columns: {
           ...this.state.columns,
           [newColumn.id]: newColumn
-        }
+        },
+        solved 
+      
       };
 
       this.setState(newState);
@@ -151,7 +197,7 @@ export default class gameField extends Component {
     //     ...start,
     //     taskIds: newLetterIds,
     //   };
-      
+
     //   const finishLetterIds = Array.from(finish.contentIds);
     //   finishLetterIds.splice(destination.index, 0 , draggableId);
     //   const newFinish = {
