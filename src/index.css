@@ -14,6 +14,34 @@ body {
     min-height : 100vh;
 }
 
+.solved{
+  background-color: rgba(255, 217, 0, 0.685) !important;
+}
+
+.solved-letter{ 
+  background-color: transparent !important;
+  border: 0px solid lightgrey !important;
+  margin-bottom: 1px !important;
+  padding: 2px !important;
+}
+
+.unsolved {
+  background-color: rgba(245, 245, 220, 0.5);
+}
+
+p {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+
+
+
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

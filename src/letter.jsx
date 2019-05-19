@@ -8,8 +8,8 @@ border-radius: 5px;
 padding: 8px;
 margin-bottom: 8px;
 text-align: center;
-background-color: ${props => 
-  props.isDragDisabled ?
+background-color: ${ props => 
+  props.solved ?
   'lightgreen' :
   props.isDragging 
   ? 'white' 
@@ -19,8 +19,8 @@ background-color: ${props =>
 
 export default class task extends Component {
   render() {
-    // console.log(this.props)
-    const isDragDisable = this.props.letter.correct;
+    const isDragDisable = this.props.solved;
+
     return (
       <Draggable 
       draggableId={this.props.letter.id} 
@@ -30,13 +30,15 @@ export default class task extends Component {
       {(provided, snapshot) => (
         // snapshot.isDragging  // isDraggingOver
         <Container
+
+        className = {this.props.solved ? "solved-letter" : "unsolved-letter"}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         ref={provided.innerRef}
         // innerRef={provided.innerRef}
         isDragging={snapshot.isDragging}
         >
-        {this.props.letter.content}
+        <p> {this.props.letter.content}</p>
       </Container>
       )}
       </Draggable>

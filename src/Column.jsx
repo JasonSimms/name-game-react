@@ -8,9 +8,7 @@ const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 2px;
   width: 200px;
-
-  display: flex;
-  flex-direction: column;
+ 
 `;
 const Title = styled.h3`
   padding: 8px;
@@ -21,25 +19,42 @@ const List = styled.div`
   min-height: 100px;
 `;
 
+class InnerList extends React.Component {
+  
+  shouldComponentUpdate(nextProps){
+    if (nextProps.content === this.props.content) return false;
+    else return true;
+  }
+  
+  render () {
+    return this.props.content.map((el, index) => (
+      <Letter key={el.id} index={index} solved={this.props.solved} isDraggingDisabled={this.props.solved} letter={el} />
+    ));
+  }
+}
+
 export default class Column extends Component {
 
   render() {
-    console.log("this.props");
-    console.log(this.props);
     return (
-      <Container>
+      <Container
+      className={this.props.column.solved ? 'solved' : 'unsolved'}
+      >
+
         <Title>{this.props.column.title}</Title>
-        <Droppable droppableId={this.props.column.id}>
-          {provided => (
+        <Droppable 
+        droppableId={this.props.column.id}
+        isDropDisabled = { this.props.column.solved }
+
+        
+        >
+          {(provided, snapshot) => (
             <List 
             ref={provided.innerRef}
             // innerRef={provided.innerRef} 
             {...provided.droppableProps}>
 
-              {this.props.content.map((el, index) => (
-                <Letter key={el.id} index={index} letter={el} />
-              ))}
-
+              <InnerList content={this.props.content} solved={this.props.solved}/>
               {provided.placeholder}
             </List>
           )}

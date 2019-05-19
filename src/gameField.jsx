@@ -55,28 +55,30 @@ let initialData = {
     "column-1": {
       id: "column-1",
       title: "Letter Bank",
-      contentIds: shuffle(bank)
+      contentIds: shuffle(bank),
+      solved: false
+
     },
 
-    solved: {
-      first: false,
-      second: false,
-      third: false
-    },
     "column-2": {
       id: "column-2",
       title: "First",
-      contentIds: []
+      contentIds: [],
+      solved: false
     },
     "column-3": {
       id: "column-3",
       title: "Middle",
-      contentIds: []
+      contentIds: [],
+      solved: false
+
     },
     "column-4": {
       id: "column-4",
       title: "Last",
-      contentIds: []
+      contentIds: [],
+      solved: false
+
     }
   },
   letterBank: ["column-1"],
@@ -84,6 +86,8 @@ let initialData = {
 };
 
 initialData.letters = letters;
+
+
 
 export default class gameField extends Component {
   state = initialData;
@@ -105,7 +109,6 @@ export default class gameField extends Component {
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];
 
-    const solved = this.state.solved;
 
     if (start === finish) {
       const newLetterIds = Array.from(start.contentIds);
@@ -113,68 +116,38 @@ export default class gameField extends Component {
 
       newLetterIds.splice(destination.index, 0, draggableId);
 
-      let guess = newLetterIds.map(el => {
-        return el.content;
-      });
+      
 
       const newColumn = {
         ...start,
-        contentIds: newLetterIds,
-        guess
+        contentIds: newLetterIds
       };
 
-      const newSolve = {
-        ...solved
-      };
+     
 
-      //CHECK COLUMN FOR GUESSES
-      const checkIt = column => {
-        const getName = () => {
-          return column.contentIds.join("").replace(/[0-9]/g, "");
-        };
-      };
-      // var guessName = newColumn.contentIds.join("").replace(/[0-9]/g, "");
-
-      // if (
-      //   guessName.includes("BENNETT") ||
-      //   guessName.includes("NICHOLAS") ||
-      //   guessName.includes("SIMMS")
-      // ) {
-      //   console.log("bingo");
-
-      //   const removeName = str => {
-      //     let pos = guessName.indexOf(str);
-      //     let length = str.length;
-      //     newColumn.contentIds.splice(pos, length);
-      //   };
-
-      //   if (guessName.includes("BENNETT")) {
-      //     removeName("BENNETT");
-      //     newSolve.first = true;
-      //   }
-
-      //   if (guessName.includes("NICHOLAS")) {
-      //     removeName("NICHOLAS");
-      //     newSolve.second = true;
-      //   }
-
-      //   if (guessName.includes("SIMMS")) {
-      //     removeName("SIMMS");
-      //     newSolve.third = true;
-      //   }
-
-      // }
-
-      const newState = {
+    
+      let newState = {
         ...this.state,
         columns: {
           ...this.state.columns,
           [newColumn.id]: newColumn
         },
-        solved: newSolve
       };
 
-      checkIt(newColumn);
+      let names = ["column-2", "column-3", "column-4"];
+      names.forEach(col => {
+        if (newState.columns[col].contentIds.length > 1)
+          newState.columns[col].guess = newState.columns[col].contentIds
+            .join("")
+            .replace(/[0-9]/g, "");
+        if (col === "column-2" && newState.columns[col].guess === "BENNETT")
+          newState.columns[col].solved = true;
+        if (col === "column-3" && newState.columns[col].guess === "NICHOLAS")
+          newState.columns[col].solved = true;
+        if (col === "column-4" && newState.columns[col].guess === "SIMMS")
+          newState.columns[col].solved = true;
+      });
+
       this.setState(newState);
       return;
     }
@@ -196,7 +169,7 @@ export default class gameField extends Component {
       contentIds: finishLetterIds
     };
 
-    const newState = {
+    let newState = {
       ...this.state,
       columns: {
         ...this.state.columns,
@@ -204,57 +177,68 @@ export default class gameField extends Component {
         [newFinish.id]: newFinish
       }
     };
+
+    let names = ["column-2", "column-3", "column-4"];
+    names.forEach(col => {
+      if (newState.columns[col].contentIds.length > 1)
+        newState.columns[col].guess = newState.columns[col].contentIds
+          .join("")
+          .replace(/[0-9]/g, "");
+      if (col === "column-2" && newState.columns[col].guess === "BENNETT")
+        newState.columns[col].solved = true;
+      if (col === "column-3" && newState.columns[col].guess === "NICHOLAS")
+        newState.columns[col].solved = true;
+      if (col === "column-4" && newState.columns[col].guess === "SIMMS")
+        newState.columns[col].solved = true;
+    });
+
     this.setState(newState);
   };
 
   render() {
-    console.log(this.state);
     return (
       <DragDropContext
         // onDragStart
         // onDragUpdate
         onDragEnd={this.onDragEnd}
       >
-        {this.state.solved && this.state.solved.first && <div>Bennett</div>}
-        {this.state.solved && this.state.solved.second && <div>Nicholas</div>}
-        {this.state.solved && this.state.solved.third && <div>Simms!</div>}
-
         <Container>
-          <div className = "column">
-          {this.state.letterBank.map(columnId => {
-            const column = this.state.columns[columnId];
-            const myLetters = column.contentIds.map(
-              el => this.state.letters[el]
-            );
+          <div className="column">
+            {this.state.letterBank.map(columnId => {
+              const column = this.state.columns[columnId];
+              const myLetters = column.contentIds.map(
+                el => this.state.letters[el]
+              );
 
-            return (
-              <Column
-                key={column.title}
-                title={column.title}
-                column={column}
-                content={myLetters}
-              />
-            );
-          })}
+              return (
+                <Column
+                  key={column.title}
+                  title={column.title}
+                  column={column}
+                  content={myLetters}
+                />
+              );
+            })}
           </div>
-          <div className = "column">
+          <div className="column">
+            {this.state.columnOrder.map(columnId => {
+              const column = this.state.columns[columnId];
+              const myLetters = column.contentIds.map(
+                el => this.state.letters[el]
+              );
 
-          {this.state.columnOrder.map(columnId => {
-            const column = this.state.columns[columnId];
-            const myLetters = column.contentIds.map(
-              el => this.state.letters[el]
-            );
-
-            return (
-              <Column
-                className = "row"
-                key={column.title}
-                title={column.title}
-                column={column}
-                content={myLetters}     
-              />
-            );
-          })}
+              return (
+                <Column
+                  className="row"
+                  key={column.title}
+                  title={column.title}
+                  column={column}
+                  content={myLetters}
+                  // isDragDisabled ={ true}
+                  solved={column.solved}
+                />
+              );
+            })}
           </div>
         </Container>
       </DragDropContext>
