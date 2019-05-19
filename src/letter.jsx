@@ -4,9 +4,10 @@ import { Draggable } from 'react-beautiful-dnd';
 
 const Container = styled.div`
 border: 1px solid lightgrey;
-border-radius: 2px;
+border-radius: 5px;
 padding: 8px;
 margin-bottom: 8px;
+text-align: center;
 background-color: ${props => 
   props.isDragDisabled ?
   'lightgreen' :

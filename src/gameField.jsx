@@ -6,6 +6,7 @@ import Column from "./Column";
 import styled from "styled-components";
 const Container = styled.div`
   display: flex;
+  font-family: "Pacifico", cursive, "Helvetica Neue", sans-serif;
 `;
 
 const shuffle = array => {
@@ -57,45 +58,37 @@ let initialData = {
       contentIds: shuffle(bank)
     },
 
-  solved: {
-    first: false,
-    second : false,
-    third: false,
-
-  }
-    // "column-2": {
-    //   id: "column-2",
-    //   title: "First",
-    //   contentIds: []
-    // },
-    // "column-3": {
-    //   id: "column-2",
-    //   title: "Middle",
-    //   contentIds: []
-    // },
-    // "column-4": {
-    //   id: "column-2",
-    //   title: "Last",
-    //   contentIds: []
-    // },
+    solved: {
+      first: false,
+      second: false,
+      third: false
+    },
+    "column-2": {
+      id: "column-2",
+      title: "First",
+      contentIds: []
+    },
+    "column-3": {
+      id: "column-3",
+      title: "Middle",
+      contentIds: []
+    },
+    "column-4": {
+      id: "column-4",
+      title: "Last",
+      contentIds: []
+    }
   },
-
-  columnOrder: [
-    "column-1"
-    // ,
-    // "column-2", "column-3", "column-4"
-  ]
+  letterBank: ["column-1"],
+  columnOrder: ["column-2", "column-3", "column-4"]
 };
 
 initialData.letters = letters;
-console.log(initialData.letters);
 
 export default class gameField extends Component {
   state = initialData;
 
   onDragEnd = result => {
-    // console.log( result)
-    // console.error(this.state)
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -111,6 +104,8 @@ export default class gameField extends Component {
 
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];
+
+    const solved = this.state.solved;
 
     if (start === finish) {
       const newLetterIds = Array.from(start.contentIds);
@@ -128,51 +123,47 @@ export default class gameField extends Component {
         guess
       };
 
+      const newSolve = {
+        ...solved
+      };
+
       //CHECK COLUMN FOR GUESSES
-      var guessName = newColumn.contentIds.join("").replace(/[0-9]/g, "");
-      console.log(guessName, guessName.includes("BENNETT"),guessName.includes("NICHOLAS"),guessName.includes("SIMMS") );
-      
-      let solved = this.state.solved
-
-      if (
-        guessName.includes("BENNETT") ||
-        guessName.includes("NICHOLAS") ||
-        guessName.includes("SIMMS")
-      ) {
-        console.log("bingo");
-        let pos = 0;
-        let length = 0;
-        
-
-        const removeName = () => {
-          newColumn.contentIds.splice(pos, length);
+      const checkIt = column => {
+        const getName = () => {
+          return column.contentIds.join("").replace(/[0-9]/g, "");
         };
+      };
+      // var guessName = newColumn.contentIds.join("").replace(/[0-9]/g, "");
 
-        if (guessName.includes("BENNETT")) {
-        console.log("BENNETT");
+      // if (
+      //   guessName.includes("BENNETT") ||
+      //   guessName.includes("NICHOLAS") ||
+      //   guessName.includes("SIMMS")
+      // ) {
+      //   console.log("bingo");
 
-          length = 7;
-          pos = guessName.indexOf("BENNETT");
-          removeName();
-          solved.first = true;
-        }
+      //   const removeName = str => {
+      //     let pos = guessName.indexOf(str);
+      //     let length = str.length;
+      //     newColumn.contentIds.splice(pos, length);
+      //   };
 
-        if (guessName.includes("NICHOLAS")) {
-          length = 8;
-          pos = guessName.indexOf("NICHOLAS");
-          removeName();
-          solved.second = true;
-        }
+      //   if (guessName.includes("BENNETT")) {
+      //     removeName("BENNETT");
+      //     newSolve.first = true;
+      //   }
 
-        if (guessName.includes("SIMMS")) {
-          length = 5;
-          pos = guessName.indexOf("SIMMS");
-          removeName();
-          solved.third = true;
-        }
+      //   if (guessName.includes("NICHOLAS")) {
+      //     removeName("NICHOLAS");
+      //     newSolve.second = true;
+      //   }
 
-        // newColumn.contentIds.splice(newColumn.contentIds.indexOf("J"), 4);
-      }
+      //   if (guessName.includes("SIMMS")) {
+      //     removeName("SIMMS");
+      //     newSolve.third = true;
+      //   }
+
+      // }
 
       const newState = {
         ...this.state,
@@ -180,51 +171,57 @@ export default class gameField extends Component {
           ...this.state.columns,
           [newColumn.id]: newColumn
         },
-        solved 
-      
+        solved: newSolve
       };
 
+      checkIt(newColumn);
       this.setState(newState);
       return;
     }
 
     // move one column to another
 
-    // const newLetterIds = Array.from(start.contentIds);
-    // newLetterIds.splice(source.index, 1)
+    const newLetterIds = Array.from(start.contentIds);
+    newLetterIds.splice(source.index, 1);
 
-    //   const newStart = {
-    //     ...start,
-    //     taskIds: newLetterIds,
-    //   };
+    const newStart = {
+      ...start,
+      contentIds: newLetterIds
+    };
 
-    //   const finishLetterIds = Array.from(finish.contentIds);
-    //   finishLetterIds.splice(destination.index, 0 , draggableId);
-    //   const newFinish = {
-    //     ...finish,
-    //     taskIds: finishLetterIds,
-    //   };
+    const finishLetterIds = Array.from(finish.contentIds);
+    finishLetterIds.splice(destination.index, 0, draggableId);
+    const newFinish = {
+      ...finish,
+      contentIds: finishLetterIds
+    };
 
-    //   const newState= {
-    //     ...this.state,
-    //     columns: {
-    //       ...this.state.columns,
-    //       [newStart.id]: newStart,
-    //       [newFinish.id]: newFinish,
-    //     }
-    //   };
-    //   this.setState(newState);
+    const newState = {
+      ...this.state,
+      columns: {
+        ...this.state.columns,
+        [newStart.id]: newStart,
+        [newFinish.id]: newFinish
+      }
+    };
+    this.setState(newState);
   };
 
   render() {
+    console.log(this.state);
     return (
       <DragDropContext
         // onDragStart
         // onDragUpdate
         onDragEnd={this.onDragEnd}
       >
+        {this.state.solved && this.state.solved.first && <div>Bennett</div>}
+        {this.state.solved && this.state.solved.second && <div>Nicholas</div>}
+        {this.state.solved && this.state.solved.third && <div>Simms!</div>}
+
         <Container>
-          {this.state.columnOrder.map(columnId => {
+          <div className = "column">
+          {this.state.letterBank.map(columnId => {
             const column = this.state.columns[columnId];
             const myLetters = column.contentIds.map(
               el => this.state.letters[el]
@@ -239,7 +236,26 @@ export default class gameField extends Component {
               />
             );
           })}
-          ;
+          </div>
+          <div className = "column">
+
+          {this.state.columnOrder.map(columnId => {
+            const column = this.state.columns[columnId];
+            const myLetters = column.contentIds.map(
+              el => this.state.letters[el]
+            );
+
+            return (
+              <Column
+                className = "row"
+                key={column.title}
+                title={column.title}
+                column={column}
+                content={myLetters}     
+              />
+            );
+          })}
+          </div>
         </Container>
       </DragDropContext>
     );
