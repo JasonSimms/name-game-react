@@ -3,6 +3,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import React, { Component } from "react";
 
 import Column from "./Column";
+import GameOver from "./GameOver";
 import styled from "styled-components";
 const Container = styled.div`
   display: flex;
@@ -29,6 +30,16 @@ const shuffle = array => {
   return array;
 };
 
+const checkWin = state => {
+  if (
+    state["column-4"].solved &&
+    state["column-3"].solved &&
+    state["column-2"].solved
+  )
+    return true;
+  else return false;
+};
+
 // BUILD LETTERS FOR LETTER BANK FROM A NAME
 let name = "BENNETTNICHOLASSIMMS";
 name = name.split("");
@@ -41,23 +52,12 @@ name.forEach((el, index) => {
 });
 
 let initialData = {
-  // letters: {
-  //   J: { id: "J", content: "J" },
-  //   O: { id: "O", content: "O" },
-  //   H: { id: "H", content: "H" },
-  //   N: { id: "N", content: "N" },
-  //   D: { id: "D", content: "D" },
-  //   O2: { id: "O2", content: "O" },
-  //   E: { id: "E", content: "E" }
-  // },
-
   columns: {
     "column-1": {
       id: "column-1",
       title: "Letter Bank",
       contentIds: shuffle(bank),
       solved: false
-
     },
 
     "column-2": {
@@ -71,23 +71,20 @@ let initialData = {
       title: "Middle",
       contentIds: [],
       solved: false
-
     },
     "column-4": {
       id: "column-4",
       title: "Last",
       contentIds: [],
       solved: false
-
     }
   },
   letterBank: ["column-1"],
-  columnOrder: ["column-2", "column-3", "column-4"]
+  columnOrder: ["column-2", "column-3", "column-4"],
+  win: false
 };
 
 initialData.letters = letters;
-
-
 
 export default class gameField extends Component {
   state = initialData;
@@ -109,32 +106,27 @@ export default class gameField extends Component {
     const start = this.state.columns[source.droppableId];
     const finish = this.state.columns[destination.droppableId];
 
-
     if (start === finish) {
       const newLetterIds = Array.from(start.contentIds);
       newLetterIds.splice(source.index, 1);
 
       newLetterIds.splice(destination.index, 0, draggableId);
 
-      
-
       const newColumn = {
         ...start,
         contentIds: newLetterIds
       };
 
-     
-
-    
       let newState = {
         ...this.state,
         columns: {
           ...this.state.columns,
           [newColumn.id]: newColumn
-        },
+        }
       };
 
       let names = ["column-2", "column-3", "column-4"];
+
       names.forEach(col => {
         if (newState.columns[col].contentIds.length > 1)
           newState.columns[col].guess = newState.columns[col].contentIds
@@ -142,11 +134,15 @@ export default class gameField extends Component {
             .replace(/[0-9]/g, "");
         if (col === "column-2" && newState.columns[col].guess === "BENNETT")
           newState.columns[col].solved = true;
+
         if (col === "column-3" && newState.columns[col].guess === "NICHOLAS")
           newState.columns[col].solved = true;
+
         if (col === "column-4" && newState.columns[col].guess === "SIMMS")
           newState.columns[col].solved = true;
       });
+
+      newState.win = checkWin(newState.columns);
 
       this.setState(newState);
       return;
@@ -192,11 +188,14 @@ export default class gameField extends Component {
         newState.columns[col].solved = true;
     });
 
+    newState.win = checkWin(newState.columns);
+
     this.setState(newState);
   };
 
   render() {
-    return (
+    if(this.state.win) return <GameOver />
+    else return ( 
       <DragDropContext
         // onDragStart
         // onDragUpdate

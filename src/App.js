@@ -7,7 +7,6 @@ import background from './backg.jpg'
 function App() {
   return (
     <div className="App">
-      <h3>Hello world</h3>
       <Game />
     </div>
   );
