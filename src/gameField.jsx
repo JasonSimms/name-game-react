@@ -74,7 +74,7 @@ let initialData = {
     },
     "column-4": {
       id: "column-4",
-      title: "Last",
+      title: "Last *try Simms ;-)",
       contentIds: [],
       solved: false
     }

@@ -11,7 +11,12 @@ body {
 
 .App {
     background-image: url(./backg.jpg);
-    min-height : 100vh;
+    background-repeat: repeat;
+    min-height : 150vh;
+    min-width : 100vw;
+    width: 110vw;
+    /* width: 800px !important; */
+
 }
 
 .solved{
