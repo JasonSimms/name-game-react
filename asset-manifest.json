@@ -1,15 +1,19 @@
 {
   "files": {
-    "main.css": "/name-game-react/static/css/main.584f321a.chunk.css",
-    "main.js": "/name-game-react/static/js/main.443dd206.chunk.js",
-    "main.js.map": "/name-game-react/static/js/main.443dd206.chunk.js.map",
+    "main.css": "/name-game-react/static/css/main.d1f661be.chunk.css",
+    "main.js": "/name-game-react/static/js/main.abf45798.chunk.js",
+    "main.js.map": "/name-game-react/static/js/main.abf45798.chunk.js.map",
     "runtime~main.js": "/name-game-react/static/js/runtime~main.760ae63c.js",
     "runtime~main.js.map": "/name-game-react/static/js/runtime~main.760ae63c.js.map",
-    "static/js/2.3310f33a.chunk.js": "/name-game-react/static/js/2.3310f33a.chunk.js",
-    "static/js/2.3310f33a.chunk.js.map": "/name-game-react/static/js/2.3310f33a.chunk.js.map",
+    "static/css/2.f366d23a.chunk.css": "/name-game-react/static/css/2.f366d23a.chunk.css",
+    "static/js/2.9ca26352.chunk.js": "/name-game-react/static/js/2.9ca26352.chunk.js",
+    "static/js/2.9ca26352.chunk.js.map": "/name-game-react/static/js/2.9ca26352.chunk.js.map",
     "index.html": "/name-game-react/index.html",
-    "precache-manifest.30b1a2929d2867b9b034738ecef64bc4.js": "/name-game-react/precache-manifest.30b1a2929d2867b9b034738ecef64bc4.js",
+    "precache-manifest.aee1eaf21f032adea534f802f9434c28.js": "/name-game-react/precache-manifest.aee1eaf21f032adea534f802f9434c28.js",
     "service-worker.js": "/name-game-react/service-worker.js",
-    "static/css/main.584f321a.chunk.css.map": "/name-game-react/static/css/main.584f321a.chunk.css.map"
+    "static/css/2.f366d23a.chunk.css.map": "/name-game-react/static/css/2.f366d23a.chunk.css.map",
+    "static/css/main.d1f661be.chunk.css.map": "/name-game-react/static/css/main.d1f661be.chunk.css.map",
+    "static/media/backg.jpg": "/name-game-react/static/media/backg.f9a7c5e6.jpg",
+    "static/media/ball1075.jpg": "/name-game-react/static/media/ball1075.9d541357.jpg"
   }
 }
